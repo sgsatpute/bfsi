@@ -83,7 +83,15 @@ We tested our AI model on **10,000 application records**:
 
 ---
 
-## 7. What files are inside the submission?
+## 7. What features are inside the Live Web App?
+- 📱 **Borrower Loan Application Form:** Test live customer onboarding with simulated behavioral biometrics.
+- 🛡️ **Underwriter Command Center Queue:** Inspect queue applications (`APP0000000` to `APP0009999`) with 20-signal vector breakdowns.
+- 🧪 **Threat Scenario Simulator:** Test 6 attack vectors (Synthetic Burner Ring, Scripted Bot, Virtual Office, IP Velocity).
+- 📥 **Downloadable JSON Audit Log Exporter:** Generate signed compliance logs for bank regulatory audits.
+
+---
+
+## 8. What files are inside the submission?
 - `data/synthetic_kyc_behavioral.csv`: 10,000 application records with 20 signals.
 - `model/train_model.py`: AI model training & 5-fold cross-validation script.
 - `app/dashboard.py`: Live interactive web app dashboard (run: `python -m streamlit run app/dashboard.py`).
