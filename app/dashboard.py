@@ -1,5 +1,5 @@
 """
-Multimodal Synthetic Identity Fraud Detection - Human-Centered Explainable Portal
+Multimodal Synthetic Identity Fraud Detection - Masterpiece UI & Explainable Risk Portal
 Run with: python -m streamlit run app/dashboard.py
 """
 import streamlit as st
@@ -10,7 +10,7 @@ import os
 import json
 
 st.set_page_config(
-    page_title="Digital Lending Fraud Risk Scanner",
+    page_title="Synthetic Identity Fraud Risk Engine",
     page_icon="🛡️",
     layout="wide",
     initial_sidebar_state="collapsed"
@@ -41,7 +41,7 @@ def load_dataset():
 model, feature_cols, metrics = load_assets()
 df_sample = load_dataset()
 
-# Custom Styling
+# Custom High-Contrast CSS Theme (Works in Dark & Light Modes)
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
@@ -51,72 +51,114 @@ st.markdown("""
     }
     
     .hero-banner {
-        background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+        background: linear-gradient(135deg, #0B0F19 0%, #1A2332 100%);
+        border: 1px solid #2A364F;
         border-radius: 16px;
-        padding: 20px 28px;
-        color: white;
-        margin-bottom: 20px;
-        box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.15);
+        padding: 24px 32px;
+        color: #F8FAFC !important;
+        margin-bottom: 24px;
+        box-shadow: 0 12px 30px rgba(0,0,0,0.3);
     }
     
     .hero-title {
-        font-size: 24px;
+        font-size: 28px;
         font-weight: 800;
         margin: 0;
-        color: #F8FAFC;
+        color: #FFFFFF !important;
+        letter-spacing: -0.5px;
     }
     
     .hero-sub {
-        font-size: 13px;
-        color: #94A3B8;
-        margin-top: 4px;
+        font-size: 14px;
+        color: #94A3B8 !important;
+        margin-top: 6px;
     }
     
-    .result-box-pass {
-        background: #ECFDF5;
-        border: 2px solid #10B981;
+    .guide-card {
+        background: #111827 !important;
+        border: 1px solid #1F2937 !important;
         border-radius: 12px;
-        padding: 18px;
-        color: #065F46;
+        padding: 16px 20px;
+        margin-bottom: 20px;
+        color: #E5E7EB !important;
+    }
+    
+    .step-pill {
+        background: #3B82F6;
+        color: #FFFFFF !important;
+        font-weight: 700;
+        font-size: 11px;
+        padding: 3px 10px;
+        border-radius: 20px;
+        display: inline-block;
+        margin-right: 6px;
+    }
+
+    /* Result Badges */
+    .result-box-pass {
+        background-color: #064E3B !important;
+        border: 2px solid #10B981 !important;
+        border-radius: 14px;
+        padding: 20px;
+        color: #ECFDF5 !important;
         text-align: center;
     }
 
     .result-box-warn {
-        background: #FFFBEB;
-        border: 2px solid #F59E0B;
-        border-radius: 12px;
-        padding: 18px;
-        color: #92400E;
+        background-color: #78350F !important;
+        border: 2px solid #F59E0B !important;
+        border-radius: 14px;
+        padding: 20px;
+        color: #FEF3C7 !important;
         text-align: center;
     }
 
     .result-box-danger {
-        background: #FEF2F2;
-        border: 2px solid #EF4444;
-        border-radius: 12px;
-        padding: 18px;
-        color: #991B1B;
+        background-color: #7F1D1D !important;
+        border: 2px solid #EF4444 !important;
+        border-radius: 14px;
+        padding: 20px;
+        color: #FEE2E2 !important;
         text-align: center;
     }
     
+    /* High-Contrast Diagnosis Callout Cards */
     .flag-card-red {
-        background: #FFFFFF;
-        border-left: 4px solid #EF4444;
-        padding: 10px 14px;
-        border-radius: 6px;
-        margin-bottom: 8px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        font-size: 13.5px;
+        background-color: #2D1214 !important;
+        border-left: 5px solid #EF4444 !important;
+        border-top: 1px solid #451A1C !important;
+        border-right: 1px solid #451A1C !important;
+        border-bottom: 1px solid #451A1C !important;
+        padding: 14px 18px !important;
+        border-radius: 10px !important;
+        margin-bottom: 10px !important;
+        color: #FEE2E2 !important;
+        font-size: 14px !important;
+        font-weight: 500 !important;
+        line-height: 1.5 !important;
     }
 
     .flag-card-green {
-        background: #FFFFFF;
-        border-left: 4px solid #10B981;
-        padding: 10px 14px;
-        border-radius: 6px;
-        margin-bottom: 8px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        font-size: 13.5px;
+        background-color: #062C1E !important;
+        border-left: 5px solid #10B981 !important;
+        border-top: 1px solid #0B4530 !important;
+        border-right: 1px solid #0B4530 !important;
+        border-bottom: 1px solid #0B4530 !important;
+        padding: 14px 18px !important;
+        border-radius: 10px !important;
+        margin-bottom: 10px !important;
+        color: #D1FADF !important;
+        font-size: 14px !important;
+        font-weight: 500 !important;
+        line-height: 1.5 !important;
+    }
+
+    .score-number {
+        font-size: 54px !important;
+        font-weight: 800 !important;
+        line-height: 1.0 !important;
+        margin-top: 8px !important;
+        margin-bottom: 12px !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -125,16 +167,9 @@ st.markdown("""
 st.markdown("""
 <div class="hero-banner">
     <div class="hero-title">🛡️ Digital Lending Fraud Risk Scanner</div>
-    <div class="hero-sub">Underwriter Decision Portal • Real-Time AI Fraud Diagnosis</div>
+    <div class="hero-sub">Underwriter Decision Portal • Human-Explainable AI Risk Diagnosis</div>
 </div>
 """, unsafe_allow_html=True)
-
-# Navigation Tabs
-tab_main, tab_explain, tab_proof = st.tabs([
-    "🎯 Underwriter Decision Portal",
-    "❓ How the AI Works",
-    "📊 Model Accuracy & Proof"
-])
 
 # Preset Profiles Dictionary
 presets = {
@@ -170,17 +205,30 @@ presets = {
     }
 }
 
-# -----------------------------------------------------------------------------
-# TAB 1: UNDERWRITER DECISION PORTAL
-# -----------------------------------------------------------------------------
+# Main Application Layout
+tab_main, tab_explain, tab_proof = st.tabs([
+    "🎯 Underwriter Decision Portal",
+    "❓ How the AI Works",
+    "📊 Model Accuracy & Proof"
+])
+
 with tab_main:
-    st.markdown("#### 1️⃣ Select an Applicant Profile to Test")
+    st.markdown("""
+    <div class="guide-card">
+        <div style="font-weight: 700; font-size: 15px; margin-bottom: 8px;">📋 How to Use This Tool</div>
+        <div>
+            <span class="step-pill">1. PICK APPLICANT</span> Select one of the pre-filled sample cards below.<br>
+            <span class="step-pill" style="background:#10B981; margin-top:4px;">2. READ DIAGNOSIS</span> The AI instantly analyzes 20 signals and explains all red flags in plain English!
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("#### 1️⃣ Select Applicant Profile")
+
+    if "preset_id" not in st.session_state:
+        st.session_state["preset_id"] = "fake"
 
     col_p1, col_p2, col_p3 = st.columns(3)
-    
-    if "preset_id" not in st.session_state:
-        st.session_state["preset_id"] = "rohan"
-
     with col_p1:
         if st.button("👤 **Rohan Sharma**\n\nVerified PAN, 3-yr phone, normal typing", use_container_width=True):
             st.session_state["preset_id"] = "rohan"
@@ -195,11 +243,12 @@ with tab_main:
     current_applicant = presets[preset_id]
     vals = current_applicant["data"]
 
-    st.success(f"Selected Applicant: **{current_applicant['name']}** — *{current_applicant['desc']}*")
+    st.info(f"Active Test Applicant: **{current_applicant['name']}** — *{current_applicant['desc']}*")
 
+    st.markdown("---")
     st.markdown("#### 2️⃣ Real-Time AI Fraud Diagnosis Report")
 
-    # Construct feature row automatically (always persistent, never vanishes!)
+    # Run Model Inference
     row = pd.DataFrame([vals])[feature_cols]
     proba = model.predict_proba(row)[0, 1]
     score_pct = proba * 100.0
@@ -207,26 +256,29 @@ with tab_main:
     res_col1, res_col2 = st.columns([1, 2])
     
     with res_col1:
-        st.metric("Fraud Probability Score", f"{score_pct:.1f}%")
+        score_color = "#EF4444" if proba > 0.60 else ("#F59E0B" if proba > 0.30 else "#10B981")
+        st.markdown(f'<div style="font-size:14px; font-weight:700; color:#94A3B8;">Fraud Probability Score</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="score-number" style="color:{score_color};">{score_pct:.1f}%</div>', unsafe_allow_html=True)
+
         if proba > 0.60:
             st.markdown("""
             <div class="result-box-danger">
-                <div style="font-size: 18px; font-weight: 800;">🔴 REJECT & BLOCK</div>
-                <div style="font-size: 12px; margin-top: 4px;">High probability of synthetic identity creation. Do not disburse funds.</div>
+                <div style="font-size: 20px; font-weight: 800;">🔴 REJECT & BLOCK</div>
+                <div style="font-size: 13px; margin-top: 6px; font-weight: 500;">High probability of synthetic identity creation. Do not disburse funds.</div>
             </div>
             """, unsafe_allow_html=True)
         elif proba > 0.30:
             st.markdown("""
             <div class="result-box-warn">
-                <div style="font-size: 18px; font-weight: 800;">🟡 STEP-UP VIDEO KYC</div>
-                <div style="font-size: 12px; margin-top: 4px;">Borderline identity signals. Request physical document verification or Video KYC.</div>
+                <div style="font-size: 20px; font-weight: 800;">🟡 STEP-UP VIDEO KYC</div>
+                <div style="font-size: 13px; margin-top: 6px; font-weight: 500;">Borderline identity signals. Request physical document verification or Video KYC.</div>
             </div>
             """, unsafe_allow_html=True)
         else:
             st.markdown("""
             <div class="result-box-pass">
-                <div style="font-size: 18px; font-weight: 800;">🟢 AUTO-APPROVE</div>
-                <div style="font-size: 12px; margin-top: 4px;">Verified identity authenticity. Proceed to instant loan disbursal.</div>
+                <div style="font-size: 20px; font-weight: 800;">🟢 AUTO-APPROVE</div>
+                <div style="font-size: 13px; margin-top: 6px; font-weight: 500;">Verified identity authenticity. Proceed to instant loan disbursal.</div>
             </div>
             """, unsafe_allow_html=True)
 
@@ -243,36 +295,36 @@ with tab_main:
 
         explanations = []
         if curr_p_age < 15:
-            explanations.append(("red", f"<b>Burner Phone Alert:</b> Mobile subscription activated only <b>{curr_p_age:.0f} days ago</b> (Synthetic identities use fresh numbers)."))
+            explanations.append(("red", f"⚠️ <b>Burner Phone Alert:</b> Mobile subscription activated only <b>{curr_p_age:.0f} days ago</b> (Synthetic identities use fresh numbers)."))
         else:
-            explanations.append(("green", f"<b>Established Phone Line:</b> Mobile subscription active for <b>{curr_p_age/365:.1f} years</b>."))
+            explanations.append(("green", f"✅ <b>Established Phone Line:</b> Mobile subscription active for <b>{curr_p_age/365:.1f} years</b>."))
 
         if curr_e_age < 10:
-            explanations.append(("red", f"<b>Synthetic Email Alert:</b> Email domain registered only <b>{curr_e_age:.0f} days ago</b>."))
+            explanations.append(("red", f"⚠️ <b>Synthetic Email Alert:</b> Email domain registered only <b>{curr_e_age:.0f} days ago</b>."))
         else:
-            explanations.append(("green", f"<b>Established Email Account:</b> Active email history detected (<b>{curr_e_age:.0f} days old</b>)."))
+            explanations.append(("green", f"✅ <b>Established Email Account:</b> Active email history detected (<b>{curr_e_age:.0f} days old</b>)."))
 
         if curr_fill < 30:
-            explanations.append(("red", f"<b>Scripted Form Fill:</b> Application completed in <b>{curr_fill:.0f} seconds</b> (Bot/Automation pattern)."))
+            explanations.append(("red", f"⚠️ <b>Scripted Form Fill:</b> Application completed in <b>{curr_fill:.0f} seconds</b> (Bot/Automation pattern)."))
         elif curr_paste > 0.70:
-            explanations.append(("red", f"<b>Clipboard Copy-Paste:</b> <b>{curr_paste*100:.0f}%</b> of fields populated via copy-paste."))
+            explanations.append(("red", f"⚠️ <b>Clipboard Copy-Paste:</b> <b>{curr_paste*100:.0f}%</b> of fields populated via copy-paste."))
         else:
-            explanations.append(("green", f"<b>Natural Typing Cadence:</b> Realistic human form completion time (<b>{curr_fill:.0f}s</b>)."))
+            explanations.append(("green", f"✅ <b>Natural Typing Cadence:</b> Realistic human form completion time (<b>{curr_fill:.0f}s</b>)."))
 
         if curr_dev > 1:
-            explanations.append(("red", f"<b>Device Multi-Accounting:</b> <b>{curr_dev} distinct identity applications</b> submitted from this device."))
+            explanations.append(("red", f"⚠️ <b>Device Multi-Accounting:</b> <b>{curr_dev} distinct identity applications</b> submitted from this device."))
         
         if curr_vel > 2:
-            explanations.append(("red", f"<b>High Application Velocity:</b> <b>{curr_vel} loan applications</b> originating from this IP in 24h."))
+            explanations.append(("red", f"⚠️ <b>High Application Velocity:</b> <b>{curr_vel} loan applications</b> originating from this IP in 24h."))
 
         if curr_mismatch > 0.5:
-            explanations.append(("red", f"<b>KYC Address Mismatch:</b> High mismatch score (<b>{curr_mismatch:.2f}</b>) between stated address and credit records."))
+            explanations.append(("red", f"⚠️ <b>KYC Address Mismatch:</b> High mismatch score (<b>{curr_mismatch:.2f}</b>) between stated address and credit records."))
 
         for status, text in explanations:
             if status == "red":
-                st.markdown(f'<div class="flag-card-red">⚠️ {text}</div>', unsafe_allow_html=True)
+                st.markdown(f'<div class="flag-card-red">{text}</div>', unsafe_allow_html=True)
             else:
-                st.markdown(f'<div class="flag-card-green">✅ {text}</div>', unsafe_allow_html=True)
+                st.markdown(f'<div class="flag-card-green">{text}</div>', unsafe_allow_html=True)
 
     st.markdown("---")
     with st.expander("🛠️ Optional: Adjust Applicant Data Signals (Advanced Inspection)", expanded=False):
@@ -301,8 +353,7 @@ with tab_main:
 # TAB 2: HOW THE AI WORKS
 # -----------------------------------------------------------------------------
 with tab_explain:
-    st.markdown("### ❓ How the AI Detective Works")
-    
+    st.markdown("### ❓ How the AI Detective Catches Fraud")
     st.markdown("""
     #### What is Synthetic Identity Fraud?
     Unlike stolen identity fraud (where a real person's full identity is stolen), synthetic fraud creates a **"Frankenstein Fake Identity"**:
