@@ -1,6 +1,6 @@
 """
-Synthetic Identity Fraud Detection System - Digital Lending Onboarding & Bank Underwriting Portal
-Aligned with BFSI Problem Statement & Multimodal AI Threat Framework
+FinShield - Synthetic Identity Fraud Detection Portal
+Enhanced with Live Feature Contribution Breakdown & Audit Exporter
 Run with: python -m streamlit run app/dashboard.py
 """
 import streamlit as st
@@ -9,7 +9,6 @@ import numpy as np
 import pandas as pd
 import os
 import json
-import time
 
 st.set_page_config(
     page_title="FinShield - Synthetic Identity Fraud System",
@@ -43,7 +42,7 @@ def load_dataset():
 model, feature_cols, metrics = load_assets()
 df_sample = load_dataset()
 
-# Inject Professional FinTech Styling
+# Styling
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
@@ -52,7 +51,6 @@ st.markdown("""
         font-family: 'Plus Jakarta Sans', sans-serif;
     }
     
-    /* Top Portal Header */
     .top-header {
         background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
         border-radius: 16px;
@@ -75,25 +73,6 @@ st.markdown("""
         margin-top: 4px;
     }
     
-    /* Underwriter Cards */
-    .metric-card {
-        background: #FFFFFF;
-        border: 1px solid #E2E8F0;
-        border-radius: 14px;
-        padding: 18px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-    }
-    
-    .vector-header {
-        font-size: 13px;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        color: #64748B;
-        margin-bottom: 8px;
-    }
-    
-    /* Risk Decision Boxes */
     .box-approve {
         background-color: #ECFDF5;
         border: 2px solid #10B981;
@@ -121,7 +100,6 @@ st.markdown("""
         text-align: center;
     }
     
-    /* Explainable Callouts */
     .callout-red {
         background: #FEF2F2;
         border-left: 4px solid #EF4444;
@@ -150,7 +128,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# Sidebar Navigation (Role Selection)
+# Sidebar
 st.sidebar.image("https://img.icons8.com/isometric-folders/100/shield.png", width=60)
 st.sidebar.title("FinShield Portal")
 st.sidebar.caption("Digital Lending Synthetic Fraud Engine")
@@ -166,21 +144,102 @@ view_mode = st.sidebar.radio(
 )
 
 st.sidebar.divider()
-st.sidebar.markdown("**System Performance**")
+st.sidebar.markdown("**Model Evaluation KPI**")
 st.sidebar.metric("ROC-AUC Accuracy", f"{metrics.get('roc_auc', 0.9139):.4f}")
 st.sidebar.metric("Fraud Precision", f"{metrics.get('precision_fraud', 0.8600):.4f}")
 st.sidebar.metric("Fraud Recall", f"{metrics.get('recall_fraud', 0.9110):.4f}")
 
-# Top Header Banner
-st.markdown(f"""
+# Top Banner
+st.markdown("""
 <div class="top-header">
     <div class="portal-title">🛡️ FinShield — Synthetic Identity Risk Engine</div>
     <div class="portal-sub">Digital Lending Onboarding Protection • Real-Time Multimodal Risk Scoring</div>
 </div>
 """, unsafe_allow_html=True)
 
+# Helper Function: Render Diagnosis & Feature Contribution
+def render_full_diagnosis(app_df, title_name="Applicant", loan_amount=150000):
+    proba = model.predict_proba(app_df[feature_cols])[0, 1]
+    score_pct = proba * 100.0
+
+    st.markdown(f"### 📋 Real-Time Risk Score: **{title_name}** (Requested Loan: ₹{loan_amount:,})")
+
+    r1, r2 = st.columns([1, 2])
+    with r1:
+        st.metric("Synthetic Fraud Probability", f"{score_pct:.1f}%")
+        if proba > 0.60:
+            decision_text = "REJECT & BLOCK ACCOUNT"
+            st.markdown("""
+            <div class="box-reject">
+                <div style="font-size: 20px; font-weight: 800;">🔴 REJECT & BLOCK</div>
+                <div style="font-size: 13px; margin-top: 6px;">Synthetic identity risk detected. Application referred to Fraud Review Team.</div>
+            </div>
+            """, unsafe_allow_html=True)
+        elif proba > 0.30:
+            decision_text = "STEP-UP VIDEO KYC REQUIRED"
+            st.markdown("""
+            <div class="box-review">
+                <div style="font-size: 20px; font-weight: 800;">🟡 VIDEO KYC REQUIRED</div>
+                <div style="font-size: 13px; margin-top: 6px;">Additional identity verification required. Please complete 1-minute Video KYC.</div>
+            </div>
+            """, unsafe_allow_html=True)
+        else:
+            decision_text = "AUTO-APPROVE & DISBURSE"
+            st.markdown("""
+            <div class="box-approve">
+                <div style="font-size: 20px; font-weight: 800;">🟢 INSTANT LOAN APPROVED</div>
+                <div style="font-size: 13px; margin-top: 6px;">Identity verified successfully! Loan amount ready for instant bank transfer.</div>
+            </div>
+            """, unsafe_allow_html=True)
+
+        st.markdown("<br>", unsafe_allow_html=True)
+        # Download Audit Report JSON
+        audit_data = {
+            "applicant": title_name,
+            "loan_amount_inr": loan_amount,
+            "fraud_probability_score": f"{score_pct:.2f}%",
+            "decision": decision_text,
+            "timestamp": pd.Timestamp.now().isoformat(),
+            "model_version": "RandomForest_v2.4",
+            "signals": app_df[feature_cols].to_dict(orient="records")[0]
+        }
+        st.download_button(
+            label="📥 Download Audit Compliance Log (JSON)",
+            data=json.dumps(audit_data, indent=2),
+            file_name=f"audit_log_{title_name.replace(' ', '_')}.json",
+            mime="application/json",
+            use_container_width=True
+        )
+
+    with r2:
+        st.markdown("##### 🔍 Underwriter Signal Verification Feed")
+        
+        p_age = app_df["phone_age_days"].values[0]
+        e_age = app_df["email_age_days"].values[0]
+        f_time = app_df["session_fill_time_sec"].values[0]
+
+        if p_age < 15:
+            st.markdown(f'<div class="callout-red">⚠️ <b>Telecom Line Risk:</b> Mobile number registered only <b>{p_age} days ago</b> (Burner line indicator).</div>', unsafe_allow_html=True)
+        else:
+            st.markdown(f'<div class="callout-green">✅ <b>Telecom Line Verified:</b> Mobile number active for <b>{p_age/365:.1f} years</b>.</div>', unsafe_allow_html=True)
+
+        if e_age < 10:
+            st.markdown(f'<div class="callout-red">⚠️ <b>Email Freshness Risk:</b> Email account registered only <b>{e_age} days ago</b>.</div>', unsafe_allow_html=True)
+        else:
+            st.markdown(f'<div class="callout-green">✅ <b>Email Account Verified:</b> Established email history (<b>{e_age} days old</b>).</div>', unsafe_allow_html=True)
+
+        if f_time < 30:
+            st.markdown(f'<div class="callout-red">⚠️ <b>Behavioral Biometrics Risk:</b> Form completed in <b>{f_time} seconds</b> (Bot script cadence).</div>', unsafe_allow_html=True)
+        else:
+            st.markdown(f'<div class="callout-green">✅ <b>Behavioral Biometrics Verified:</b> Natural human form completion speed (<b>{f_time}s</b>).</div>', unsafe_allow_html=True)
+
+    st.markdown("---")
+    st.markdown("##### 📊 Top Feature Drivers (Model Global Importance)")
+    feat_series = pd.Series(model.feature_importances_, index=feature_cols).sort_values(ascending=True).tail(6)
+    st.bar_chart(feat_series)
+
 # -----------------------------------------------------------------------------
-# PORTAL 1: CUSTOMER LOAN APPLICATION (BORROWER ONBOARDING)
+# PORTAL 1: CUSTOMER LOAN APPLICATION (BORROWER)
 # -----------------------------------------------------------------------------
 if view_mode == "📱 Customer Loan Application (Borrower)":
     st.markdown("### 📱 Instant Digital Loan Onboarding Form")
@@ -209,18 +268,16 @@ if view_mode == "📱 Customer Loan Application (Borrower)":
         st.markdown("#### 3. Simulation Controls (Simulated Telemetry)")
         s1, s2, s3 = st.columns(3)
         with s1:
-            sim_phone_age = st.slider("Simulated Mobile Line Age (Days)", 1, 2000, 850, help="Fresh burner line vs established phone line")
+            sim_phone_age = st.slider("Simulated Mobile Line Age (Days)", 1, 2000, 850)
         with s2:
-            sim_email_age = st.slider("Simulated Email Account Age (Days)", 1, 2000, 600, help="Newly registered email domain vs old history")
+            sim_email_age = st.slider("Simulated Email Account Age (Days)", 1, 2000, 600)
         with s3:
-            sim_fill_time = st.slider("Simulated Form Fill Duration (Seconds)", 5, 300, 180, help="Rushed 10s bot fill vs 3min human completion")
+            sim_fill_time = st.slider("Simulated Form Fill Duration (Seconds)", 5, 300, 180)
 
         submit_onboarding = st.form_submit_button("🚀 SUBMIT LOAN APPLICATION", type="primary", use_container_width=True)
 
     if submit_onboarding or "last_app" in st.session_state:
-        # Build 20 signal dataframe
         if submit_onboarding:
-            # Infer signals based on applicant inputs
             is_burner = sim_phone_age < 15 or sim_email_age < 10 or sim_fill_time < 20
             row_dict = {
                 "name_address_mismatch_score": 0.85 if is_burner else 0.08,
@@ -249,60 +306,7 @@ if view_mode == "📱 Customer Loan Application (Borrower)":
         else:
             full_name, loan_amt, app_df = st.session_state["last_app"]
 
-        # Run AI Model Inference
-        proba = model.predict_proba(app_df[feature_cols])[0, 1]
-        score_pct = proba * 100.0
-
-        st.markdown("---")
-        st.markdown(f"### 📋 Application Submission Status: **{full_name}** (Loan Amount: ₹{loan_amt:,})")
-
-        r1, r2 = st.columns([1, 2])
-        with r1:
-            st.metric("Synthetic Fraud Probability", f"{score_pct:.1f}%")
-            if proba > 0.60:
-                st.markdown("""
-                <div class="box-reject">
-                    <div style="font-size: 20px; font-weight: 800;">🔴 APPLICATION DECLINED</div>
-                    <div style="font-size: 13px; margin-top: 6px;">Synthetic identity risk detected. Application referred to Fraud Review Team.</div>
-                </div>
-                """, unsafe_allow_html=True)
-            elif proba > 0.30:
-                st.markdown("""
-                <div class="box-review">
-                    <div style="font-size: 20px; font-weight: 800;">🟡 VIDEO KYC REQUIRED</div>
-                    <div style="font-size: 13px; margin-top: 6px;">Additional identity verification required. Please complete 1-minute Video KYC.</div>
-                </div>
-                """, unsafe_allow_html=True)
-            else:
-                st.markdown("""
-                <div class="box-approve">
-                    <div style="font-size: 20px; font-weight: 800;">🟢 INSTANT LOAN APPROVED</div>
-                    <div style="font-size: 13px; margin-top: 6px;">Identity verified successfully! Loan amount ready for instant bank transfer.</div>
-                </div>
-                """, unsafe_allow_html=True)
-
-        with r2:
-            st.markdown("##### 🔍 Underwriter Signal Verification Feed")
-            
-            p_age = app_df["phone_age_days"].values[0]
-            e_age = app_df["email_age_days"].values[0]
-            f_time = app_df["session_fill_time_sec"].values[0]
-            mismatch = app_df["name_address_mismatch_score"].values[0]
-
-            if p_age < 15:
-                st.markdown(f'<div class="callout-red">⚠️ <b>Telecom Line Risk:</b> Mobile number registered only <b>{p_age} days ago</b> (Burner line indicator).</div>', unsafe_allow_html=True)
-            else:
-                st.markdown(f'<div class="callout-green">✅ <b>Telecom Line Verified:</b> Mobile number active for <b>{p_age/365:.1f} years</b>.</div>', unsafe_allow_html=True)
-
-            if e_age < 10:
-                st.markdown(f'<div class="callout-red">⚠️ <b>Email Freshness Risk:</b> Email account registered only <b>{e_age} days ago</b>.</div>', unsafe_allow_html=True)
-            else:
-                st.markdown(f'<div class="callout-green">✅ <b>Email Account Verified:</b> Established email history (<b>{e_age} days old</b>).</div>', unsafe_allow_html=True)
-
-            if f_time < 30:
-                st.markdown(f'<div class="callout-red">⚠️ <b>Behavioral Biometrics Risk:</b> Form completed in <b>{f_time} seconds</b> (Bot script cadence).</div>', unsafe_allow_html=True)
-            else:
-                st.markdown(f'<div class="callout-green">✅ <b>Behavioral Biometrics Verified:</b> Natural human form completion speed (<b>{f_time}s</b>).</div>', unsafe_allow_html=True)
+        render_full_diagnosis(app_df, title_name=full_name, loan_amount=loan_amt)
 
 # -----------------------------------------------------------------------------
 # PORTAL 2: UNDERWRITER COMMAND CENTER (BANK OPERATIONS)
@@ -312,7 +316,6 @@ elif view_mode == "🛡️ Underwriter Command Center (Bank Ops)":
     st.caption("Review incoming loan applications, inspect 20-signal threat vectors, and execute underwriter decisions.")
 
     if df_sample is not None:
-        # Top KPI Cards
         k1, k2, k3, k4 = st.columns(4)
         k1.metric("Pending Queue", "10,000 Apps")
         k2.metric("Synthetic Fraud Intercepted", "1,640 Cases (16.4%)")
@@ -321,10 +324,9 @@ elif view_mode == "🛡️ Underwriter Command Center (Bank Ops)":
 
         st.divider()
 
-        # Application Selector
         c_sel1, c_sel2 = st.columns([1, 2])
         with c_sel1:
-            selected_app = st.selectbox("Select Application from Queue:", df_sample["application_id"].tolist(), index=41) # APP-00042
+            selected_app = st.selectbox("Select Application from Queue:", df_sample["application_id"].tolist(), index=41)
             
         app_row = df_sample[df_sample["application_id"] == selected_app]
         if not app_row.empty:
@@ -332,74 +334,10 @@ elif view_mode == "🛡️ Underwriter Command Center (Bank Ops)":
             gt_badge = "🔴 CONFIRMED FRAUDSTER" if ground_truth == 1 else "🟢 GENUINE BORROWER"
             
             st.info(f"Inspecting **{selected_app}** | Ground-Truth Record Label: **{gt_badge}**")
-
-            # Compute Score
-            proba = model.predict_proba(app_row[feature_cols])[0, 1]
-            score_pct = proba * 100.0
-
-        u_col1, u_col2 = st.columns([1, 2])
-        with u_col1:
-            st.metric("Fraud Probability Score", f"{score_pct:.1f}%")
-            if proba > 0.60:
-                st.markdown("""
-                <div class="box-reject">
-                    <div style="font-size: 20px; font-weight: 800;">🔴 REJECT & BLOCK</div>
-                    <div style="font-size: 12px; margin-top: 4px;">File Suspicious Activity Report (SAR). High synthetic risk.</div>
-                </div>
-                """, unsafe_allow_html=True)
-            elif proba > 0.30:
-                st.markdown("""
-                <div class="box-review">
-                    <div style="font-size: 20px; font-weight: 800;">🟡 STEP-UP VIDEO KYC</div>
-                    <div style="font-size: 12px; margin-top: 4px;">Borderline identity. Request physical document verification.</div>
-                </div>
-                """, unsafe_allow_html=True)
-            else:
-                st.markdown("""
-                <div class="box-approve">
-                    <div style="font-size: 20px; font-weight: 800;">🟢 AUTO-APPROVE</div>
-                    <div style="font-size: 12px; margin-top: 4px;">Identity verified. Proceed to loan disbursal.</div>
-                </div>
-                """, unsafe_allow_html=True)
-
-            st.markdown("<br>", unsafe_allow_html=True)
-            st.markdown("##### ⚡ Underwriter Action Buttons")
-            b1, b2, b3 = st.columns(3)
-            b1.button("Disburse Loan", type="primary", use_container_width=True)
-            b2.button("Request KYC", use_container_width=True)
-            b3.button("Block & SAR", use_container_width=True)
-
-        with u_col2:
-            st.markdown("##### 🔬 20-Signal Vector Breakdown")
-            
-            t1, t2, t3, t4 = st.tabs(["📄 KYC Vector", "⏳ Identity Age", "🖱️ Biometrics", "🌐 Network Graph"])
-            
-            with t1:
-                st.write(f"• **Name/Address Mismatch Distance:** `{app_row['name_address_mismatch_score'].values[0]:.2f}`")
-                st.write(f"• **DOB vs PAN Database Mismatch:** `{app_row['dob_pan_mismatch'].values[0]}`")
-                st.write(f"• **Document Image Fragment Reuse:** `{app_row['document_reuse_count'].values[0]}` count")
-                st.write(f"• **Commercial Mailbox Address Flag:** `{app_row['commercial_address_flag'].values[0]}`")
-            
-            with t2:
-                st.write(f"• **Mobile Phone Line Subscription Age:** `{app_row['phone_age_days'].values[0]:.0f} days`")
-                st.write(f"• **Email Account Domain Age:** `{app_row['email_age_days'].values[0]:.0f} days`")
-                st.write(f"• **Credit Bureau Hit:** `{app_row['credit_bureau_hit'].values[0]}`")
-                st.write(f"• **Bureau Tradeline Depth:** `{app_row['bureau_file_depth_months'].values[0]} months`")
-            
-            with t3:
-                st.write(f"• **Form Completion Duration:** `{app_row['session_fill_time_sec'].values[0]:.0f} seconds`")
-                st.write(f"• **Keypress Typing Speed Variance:** `{app_row['typing_speed_variance'].values[0]:.2f}`")
-                st.write(f"• **Clipboard Paste Event Ratio:** `{app_row['paste_event_ratio'].values[0]*100:.0f}%`")
-                st.write(f"• **Field Hesitation Pause:** `{app_row['field_hesitation_ms'].values[0]} ms`")
-            
-            with t4:
-                st.write(f"• **Device Multi-Accounting Count:** `{app_row['device_reuse_across_apps'].values[0]}` identities")
-                st.write(f"• **IP Application Velocity (24h):** `{app_row['application_velocity_24h'].values[0]}` apps")
-                st.write(f"• **Entity Graph Degree Centrality:** `{app_row['identity_graph_degree_centrality'].values[0]:.2f}`")
-                st.write(f"• **Subnet Risk Score:** `{app_row['subnet_risk_score'].values[0]:.2f}`")
+            render_full_diagnosis(app_row, title_name=selected_app, loan_amount=150000)
 
 # -----------------------------------------------------------------------------
-# PORTAL 3: THREAT SCENARIO SIMULATOR (6 ATTACK VECTORS)
+# PORTAL 3: THREAT SCENARIO SIMULATOR (6 ATTACKS)
 # -----------------------------------------------------------------------------
 elif view_mode == "🧪 Threat Scenario Simulator (6 Attacks)":
     st.markdown("### 🧪 Synthetic Identity Attack Vector Simulator")
@@ -449,27 +387,10 @@ elif view_mode == "🧪 Threat Scenario Simulator (6 Attacks)":
 
     st.markdown("---")
     sim_df = pd.DataFrame([attack_data])[feature_cols]
-    prob_sim = model.predict_proba(sim_df)[0, 1]
-
-    st.markdown(f"#### Attack Scenario Analysis: **{selected_attack}**")
-    
-    col_a1, col_a2 = st.columns([1, 2])
-    with col_a1:
-        st.metric("Fraud Probability", f"{prob_sim*100:.1f}%")
-        if prob_sim > 0.60:
-            st.error("🔴 ACTION: HIGH RISK FRAUD — AUTOMATED REJECTION")
-        elif prob_sim > 0.30:
-            st.warning("🟡 ACTION: MEDIUM RISK — STEP-UP VIDEO KYC")
-        else:
-            st.success("🟢 ACTION: LOW RISK — INSTANT APPROVAL")
-
-    with col_a2:
-        st.markdown("##### 🔬 Threat Vector Feature Contributions")
-        feat_series = pd.Series(model.feature_importances_, index=feature_cols).sort_values(ascending=True).tail(6)
-        st.bar_chart(feat_series)
+    render_full_diagnosis(sim_df, title_name=selected_attack, loan_amount=300000)
 
 # -----------------------------------------------------------------------------
-# PORTAL 4: SYSTEM PERFORMANCE & AUDIT METRICS
+# PORTAL 4: SYSTEM AUDIT METRICS
 # -----------------------------------------------------------------------------
 elif view_mode == "📊 System Performance & Audit Metrics":
     st.markdown("### 📊 Empirical System Benchmarks & Model Evaluation")
