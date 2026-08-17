@@ -1,0 +1,97 @@
+{
+  "roc_auc": 0.9061,
+  "pr_auc": 0.8448,
+  "precision_fraud": 0.9562,
+  "recall_fraud": 0.7988,
+  "f1_fraud": 0.8704,
+  "accuracy": 0.961,
+  "confusion_matrix": [
+    [
+      1660,
+      12
+    ],
+    [
+      66,
+      262
+    ]
+  ],
+  "top_features": {
+    "phone_age_days": 0.20191690333618637,
+    "paste_event_ratio": 0.1400855850892456,
+    "email_age_days": 0.12682422598627485,
+    "name_address_mismatch_score": 0.10942159317123755,
+    "identity_graph_degree_centrality": 0.08370899889401574,
+    "session_fill_time_sec": 0.06268662746730091,
+    "bureau_file_depth_months": 0.056164729891742725,
+    "ssn_pan_issuance_gap_years": 0.052779429093384705,
+    "backspace_count": 0.035977847548449765,
+    "subnet_risk_score": 0.03108837286739303
+  },
+  "benchmark_comparison": {
+    "Logistic Regression": {
+      "roc_auc_mean": 0.9139,
+      "roc_auc_std": 0.0081,
+      "pr_auc_mean": 0.8476,
+      "pr_auc_std": 0.0266,
+      "precision_mean": 0.9602,
+      "precision_std": 0.0135,
+      "recall_mean": 0.8197,
+      "recall_std": 0.0123,
+      "f1_mean": 0.8844,
+      "f1_std": 0.0107,
+      "brier_score_mean": 0.0486
+    },
+    "Decision Tree": {
+      "roc_auc_mean": 0.9,
+      "roc_auc_std": 0.0088,
+      "pr_auc_mean": 0.8272,
+      "pr_auc_std": 0.0204,
+      "precision_mean": 0.8866,
+      "precision_std": 0.0431,
+      "recall_mean": 0.8185,
+      "recall_std": 0.0127,
+      "f1_mean": 0.8506,
+      "f1_std": 0.0213,
+      "brier_score_mean": 0.0527
+    },
+    "Random Forest": {
+      "roc_auc_mean": 0.9101,
+      "roc_auc_std": 0.008,
+      "pr_auc_mean": 0.8522,
+      "pr_auc_std": 0.0128,
+      "precision_mean": 0.9616,
+      "precision_std": 0.0134,
+      "recall_mean": 0.8197,
+      "recall_std": 0.0123,
+      "f1_mean": 0.8849,
+      "f1_std": 0.0102,
+      "brier_score_mean": 0.0386
+    },
+    "Gradient Boosting": {
+      "roc_auc_mean": 0.9115,
+      "roc_auc_std": 0.0128,
+      "pr_auc_mean": 0.8523,
+      "pr_auc_std": 0.0202,
+      "precision_mean": 0.9594,
+      "precision_std": 0.013,
+      "recall_mean": 0.8179,
+      "recall_std": 0.0132,
+      "f1_mean": 0.883,
+      "f1_std": 0.0105,
+      "brier_score_mean": 0.0347
+    },
+    "Multi-Layer Perceptron (MLP)": {
+      "roc_auc_mean": 0.9003,
+      "roc_auc_std": 0.0061,
+      "pr_auc_mean": 0.8382,
+      "pr_auc_std": 0.021,
+      "precision_mean": 0.8618,
+      "precision_std": 0.0392,
+      "recall_mean": 0.7966,
+      "recall_std": 0.0145,
+      "f1_mean": 0.8277,
+      "f1_std": 0.0242,
+      "brier_score_mean": 0.0494
+    }
+  }
+}
