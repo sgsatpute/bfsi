@@ -327,14 +327,15 @@ elif view_mode == "🛡️ Underwriter Command Center (Bank Ops)":
             selected_app = st.selectbox("Select Application from Queue:", df_sample["application_id"].tolist(), index=41) # APP-00042
             
         app_row = df_sample[df_sample["application_id"] == selected_app]
-        ground_truth = app_row["is_fraud"].values[0]
-        gt_badge = "🔴 CONFIRMED FRAUDSTER" if ground_truth == 1 else "🟢 GENUINE BORROWER"
-        
-        st.info(f"Inspecting **{selected_app}** | Ground-Truth Record Label: **{gt_badge}**")
+        if not app_row.empty:
+            ground_truth = app_row["is_fraud"].values[0]
+            gt_badge = "🔴 CONFIRMED FRAUDSTER" if ground_truth == 1 else "🟢 GENUINE BORROWER"
+            
+            st.info(f"Inspecting **{selected_app}** | Ground-Truth Record Label: **{gt_badge}**")
 
-        # Compute Score
-        proba = model.predict_proba(app_row[feature_cols])[0, 1]
-        score_pct = proba * 100.0
+            # Compute Score
+            proba = model.predict_proba(app_row[feature_cols])[0, 1]
+            score_pct = proba * 100.0
 
         u_col1, u_col2 = st.columns([1, 2])
         with u_col1:
