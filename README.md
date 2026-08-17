@@ -43,30 +43,82 @@ Unlike traditional **stolen identity fraud** (where an unauthorized party impers
 
 ---
 
-## 💡 2. System Architecture & 4 Operating Portals
+## ⚙️ 2. How the AI System Works (Under the Hood)
 
-Our live production web application provides **4 dedicated Operating Portals** tailored to both borrowers and bank risk underwriters:
+The detection engine operates via a 5-stage real-time risk processing pipeline:
 
 ```
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                        AEGIS / FINSHIELD ENTERPRISE RISK PORTAL                        │
-├───────────────────┬───────────────────┬────────────────────────┬───────────────────────┤
-│ 📱 Borrower Form  │ 🛡️ Underwriter Ops│ 🧪 Threat Simulator   │ 📊 Audit Metrics      │
-│ • Live Onboarding │ • Queue Review    │ • 6 Attack Vectors     │ • 5-Fold CV Table     │
-│ • Real-Time Score │ • 20-Signal Vector│ • Bot & Burner Rings   │ • ROC Curves Plot     │
-│ • Telemetry Demo  │ • Action Buttons  │ • Resilience Test      │ • Confusion Matrix    │
-└───────────────────┴───────────────────┴────────────────────────┴───────────────────────┘
+  ┌───────────────────────┐      ┌───────────────────────────────┐      ┌───────────────────────────────┐
+  │ 1. Onboarding Capture │ ───► │ 2. 20-Signal Vector Assembly  │ ───► │ 3. Random Forest Machine      │
+  │ • Stated Application  │      │ • KYC Mismatch Distance       │      │    Learning Model             │
+  │ • Silent Telemetry    │      │ • Telecom & Domain Freshness  │      │ • Class-Weighted Trees        │
+  │ • Keystroke Cadence   │      │ • Keystroke & Paste Ratios    │      │ • Probability P(Fraud | X)    │
+  └───────────────────────┘      └───────────────────────────────┘      └───────────────┬───────────────┘
+                                                                                        │
+  ┌─────────────────────────────────────────────────────────────┐                       │
+  │ 5. Automated Action Routing & Audit Exporter                │ ◄─────────────────────┘
+  │ • < 30% Risk  ──► 🟢 AUTO-APPROVE & DISBURSE LOAN          │
+  │ • 30 - 60%    ──► 🟡 STEP-UP VIDEO KYC / OTP VERIFICATION   │
+  │ • > 60% Risk  ──► 🔴 REJECT APPLICATION & FILE SAR          │
+  │ • Downloadable Signed JSON Audit Compliance Log             │
+  └─────────────────────────────────────────────────────────────┘
 ```
 
-### 🎮 The 4 Operating Portals Overview:
-1. 📱 **Customer Loan Application (Borrower Onboarding):** Live loan application form where applicants enter details, while the AI engine silently harvests behavioral biometrics and evaluates risk.
-2. 🛡️ **Underwriter Command Center (Bank Ops Queue):** Real-time queue inspector for bank risk analysts to review applications (`APP0000000` to `APP0009999`), view 20-signal vector breakdowns, and execute actions (`Disburse Loan`, `Request Video KYC`, `Block & File SAR`).
-3. 🧪 **Threat Scenario Simulator (6 Attack Vectors):** Simulates real-world attack scenarios (*Legitimate Borrower*, *Thin-File Student*, *Synthetic Burner Line Ring*, *Scripted Bot Harvest*, *Virtual Office Mailbox*, *Device Multi-Accounting*).
-4. 📊 **System Performance & Audit Metrics:** Full 5-fold cross-validation model evaluation metrics, ROC-AUC curve plots, and confusion matrix breakdown.
+### Step-by-Step Processing Flow:
+1. **Silent Telemetry Harvesting:** As an applicant fills out the loan application, the system silently captures timing indicators (completion speed, hesitation pauses), typing variance, clipboard paste events, device fingerprints, and IP velocity.
+2. **20-Signal Feature Extraction:** Combines stated applicant data with telecom/bureau API queries into a standardized 20-dimensional feature vector $\mathbf{X}$.
+3. **Random Forest Inference:** The trained machine learning model computes the posterior fraud probability $P(\text{Synthetic Fraud} \mid \mathbf{X})$.
+4. **Explainable AI (XAI) Diagnosis:** Evaluates specific feature thresholds and generates plain-English warning callouts (e.g., *"Burner Phone Alert: Mobile line activated 4 days ago"* or *"Scripted Form Fill: Completed in 14 seconds"*).
+5. **Action Routing & Compliance Logging:** Routes the application to auto-approval, video KYC, or rejection, and generates a one-click downloadable JSON audit compliance log for bank regulatory archives.
 
 ---
 
-## 🧪 3. 20-Signal Multimodal Feature Dictionary
+## 🎮 3. How to Use the Web Application Dashboard (User Guide)
+
+The live web application ([https://sgsatpute-bfsi-appdashboard-ikfuca.streamlit.app/](https://sgsatpute-bfsi-appdashboard-ikfuca.streamlit.app/)) is organized into **4 Operating Portals** accessible via the sidebar:
+
+### 📱 Portal 1: Customer Loan Application (Borrower View)
+*Designed for testing live loan onboarding from a applicant's perspective.*
+1. Select **"📱 Customer Loan Application (Borrower)"** from the sidebar radio menu.
+2. Fill out personal details (**Full Name**, **PAN Tax ID Number**, **Date of Birth**, **Mobile Number**, **Email Address**, **Requested Loan Amount ₹**).
+3. Adjust the **Simulation Telemetry Controls** (Mobile line age, email account age, form fill speed) to simulate genuine vs. synthetic applicants.
+4. Click **"🚀 SUBMIT LOAN APPLICATION"**.
+5. View the instant onboarding status (**🟢 INSTANT LOAN APPROVED**, **🟡 VIDEO KYC REQUIRED**, or **🔴 APPLICATION DECLINED**) along with the signal verification feed.
+
+### 🛡️ Portal 2: Underwriter Command Center (Bank Operations View)
+*Designed for bank risk underwriters to review applications and make credit decisions.*
+1. Select **"🛡️ Underwriter Command Center (Bank Ops)"** from the sidebar radio menu.
+2. View top live KPI counters (**Pending Queue**, **Synthetic Fraud Intercepted**, **Capital Saved ₹41.0 Cr**, **ROC-AUC Accuracy**).
+3. Select any application ID (`APP0000000` to `APP0009999`) from the queue dropdown.
+4. Review the **Fraud Probability Score** and inspect the 4 vector tabs:
+   - **📄 KYC Vector:** Name/address distance, DOB-PAN validity, doc reuse.
+   - **⏳ Identity Age Vector:** Mobile line age, email domain age, credit tradelines.
+   - **🖱️ Biometrics Vector:** Completion duration, typing variance, paste ratio, hesitation.
+   - **🌐 Network Vector:** Device multi-accounting count, IP 24h velocity, entity graph centrality.
+5. Execute underwriter actions (**Disburse Loan**, **Request KYC**, **Block & SAR**).
+6. Click **"📥 Download Audit Compliance Log (JSON)"** to export signed audit records for bank regulatory compliance.
+
+### 🧪 Portal 3: Threat Scenario Simulator (6 Attack Vectors)
+*Designed for evaluating system resilience against specific financial fraud attack methodologies.*
+1. Select **"🧪 Threat Scenario Simulator (6 Attacks)"** from the sidebar.
+2. Choose one of the 6 pre-configured threat scenarios:
+   - **1. Typical Legitimate Borrower** (Verified identity)
+   - **2. Thin-File Student Applicant** (Genuine, limited credit file)
+   - **3. Synthetic Burner Line Ring** (4-day-old phone number + synthetic email)
+   - **4. Scripted Bot Harvest** (8-second automated form completion)
+   - **5. Ghost Company Commercial Mailbox** (Address maps to commercial mailbox)
+   - **6. Device Multi-Accounting Farm** (7 loan applications from 1 laptop)
+3. Observe how the AI engine intercepts synthetic attacks while approving legitimate applicants.
+
+### 📊 Portal 4: System Audit & Benchmark Proof
+*Designed for bank auditors, executives, and academic reviewers.*
+1. Select **"📊 System Performance & Audit Metrics"** from the sidebar.
+2. Inspect the **5-Fold Stratified Cross-Validation Benchmark Table** comparing 5 machine learning architectures (Logistic Regression, Decision Tree, Random Forest, HistGBDT, MLP Neural Networks).
+3. Review high-resolution **Multi-Model ROC Curves** and **Confusion Matrix** plots.
+
+---
+
+## 🧪 4. 20-Signal Multimodal Feature Dictionary
 
 | Category | Signal Name | Type | Description |
 |---|---|---|---|
@@ -93,7 +145,7 @@ Our live production web application provides **4 dedicated Operating Portals** t
 
 ---
 
-## 📊 4. Empirical Results & 5-Fold Cross-Validation
+## 📊 5. Empirical Results & 5-Fold Cross-Validation
 
 We benchmarked 5 machine learning architectures using **5-Fold Stratified Cross-Validation** on 10,000 onboarding records (16.4% fraud class ratio):
 
@@ -113,7 +165,7 @@ We benchmarked 5 machine learning architectures using **5-Fold Stratified Cross-
 
 ---
 
-## ⚡ 5. Quick Start & Local Running Guide
+## ⚡ 6. Quick Start & Local Running Guide
 
 ### Step 1: Clone & Install Dependencies
 ```bash
@@ -140,7 +192,7 @@ Open in browser: **http://localhost:8501**
 
 ---
 
-## 📂 6. Repository Structure & Deliverables Matrix
+## 📂 7. Repository Structure & Deliverables Matrix
 
 ```
 bfsi/
@@ -176,7 +228,7 @@ bfsi/
 
 ---
 
-## 👥 7. Team Task Allocation & Roles
+## 👥 8. Team Task Allocation & Roles
 
 1. **Lead AI/ML Engineer** — Model benchmark engine (`train_model.py`), hyperparameter tuning, 5-fold CV evaluation.
 2. **Data & Feature Engineer** — 20-signal synthetic dataset design (`generate_data.py`), noise modeling, signal distributions.
