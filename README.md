@@ -5,19 +5,19 @@
 [![IEEE Paper](https://img.shields.io/badge/Paper-IEEE_Format-00629B?style=for-the-badge&logo=IEEE&logoColor=white)](report/research_paper.pdf)
 [![ROC-AUC Metric](https://img.shields.io/badge/ROC--AUC-0.9139-success?style=for-the-badge)](model/research_metrics.json)
 
-> **Live Production Portal**: 🌐 [https://sgsatpute-bfsi-appdashboard-ikfuca.streamlit.app/](https://sgsatpute-bfsi-appdashboard-ikfuca.streamlit.app/)  
-> **Domain**: Financial Technology (FinTech), Banking & Applied AI/ML  
-> **Dataset**: 10,000 Onboarding Applications • 20 Multimodal Signals • 5-Fold Cross-Validation  
+> **Live Web Application Portal**: 🌐 [https://sgsatpute-bfsi-appdashboard-ikfuca.streamlit.app/](https://sgsatpute-bfsi-appdashboard-ikfuca.streamlit.app/)  
+> **Domain**: Banking, Financial Services & Insurance (BFSI) / Applied Artificial Intelligence & Machine Learning  
+> **Dataset**: 10,000 Onboarding Applications • 20 Multimodal Signals • 5-Fold Stratified Cross-Validation  
 
 ---
 
 ## 📌 Executive Summary
 
-Digital lending platforms provide instant loan approvals within seconds to deliver a seamless customer onboarding experience. However, this automation creates severe exposure to **Synthetic Identity Fraud (SIF)**—a financial crime where perpetrators construct composite identities by combining legitimate Personally Identifiable Information (PII) fragments (e.g., a real stolen PAN or tax ID) with fabricated details (burner phone numbers, newly created emails, false residential addresses):
+Digital lending platforms provide instant loan approvals within seconds to deliver a frictionless customer onboarding experience. However, this automation creates severe exposure to **Synthetic Identity Fraud (SIF)**—a financial crime where perpetrators construct composite identities by combining legitimate Personally Identifiable Information (PII) fragments (e.g., a real stolen PAN or tax ID) with fabricated details (burner phone numbers, newly created emails, false residential addresses):
 
 $$\text{Synthetic Identity} = P_{\text{real}} \cup P_{\text{fabricated}}$$
 
-Standard rule-based Know Your Customer (KYC) systems fail because individual field queries return positive database matches. This project implements a **Multimodal Machine Learning Framework** that fuses KYC document matching, identity freshness metrics, behavioral biometrics (keystroke cadence, paste ratio, hesitation), and device/network velocity into a real-time risk engine.
+Standard rule-based Know Your Customer (KYC) systems fail because individual field queries return positive database matches. This project implements a **Multimodal Machine Learning Framework** that fuses KYC document matching, identity freshness metrics, behavioral biometrics (keystroke cadence, paste ratio, hesitation), and device/network velocity into a real-time risk engine deployed as an enterprise web portal.
 
 ---
 
@@ -43,42 +43,26 @@ Unlike traditional **stolen identity fraud** (where an unauthorized party impers
 
 ---
 
-## 💡 2. Proposed Solution & System Architecture
+## 💡 2. System Architecture & 4 Operating Portals
 
-Our solution combines **20 multimodal signals** across four independent threat vectors to calculate a real-time fraud risk score $P(\text{Synthetic Fraud})$:
+Our live production web application provides **4 dedicated Operating Portals** tailored to both borrowers and bank risk underwriters:
 
 ```
-                  ┌─────────────────────────────────────────┐
-                  │ Loan Applicant Submits Online Form      │
-                  └────────────────────┬────────────────────┘
-                                       │
-                                       ▼
-     ┌───────────────────────────────────────────────────────────────────┐
-     │           MULTIMODAL FEATURE EXTRACTION (20 SIGNALS)              │
-     ├───────────────────┬───────────────────┬───────────────────┬───────┴───────────┐
-     │ 1. KYC Consistency│2. Identity Age    │3. Behavioral Bio  │4. Device & Network│
-     │ • Name/Addr Dist  │ • Phone Line Age  │ • Fill Duration   │ • Device Reuse    │
-     │ • DOB-PAN Match   │ • Email Age       │ • Typing Cadence  │ • 24h Velocity    │
-     │ • Image Reuse     │ • Bureau History  │ • Paste Ratio     │ • Graph Centrality│
-     └───────────────────┴─────────┬─────────┴───────────────────┴───────────────────┘
-                                   │
-                                   ▼
-          ┌─────────────────────────────────────────────────┐
-          │ Trained Random Forest Machine Learning Model    │
-          └────────────────────────┬────────────────────────┘
-                                   │
-                                   ▼
-            ┌──────────────────────────────────────────────┐
-            │ Real-Time Risk Inference Engine (0% - 100%)  │
-            └──────────────────────┬───────────────────────┘
-                                   │
-         ┌─────────────────────────┼─────────────────────────┐
-         ▼                         ▼                         ▼
-  [ < 30% Risk ]            [ 30% - 60% Risk ]        [ > 60% Risk ]
-   LOW RISK BAND             MEDIUM RISK BAND          HIGH RISK BAND
-  Auto-Approve &            Step-Up Verification      Reject Application
-  Disburse Loan              (Video KYC / OTP)         & Block Account
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│                        AEGIS / FINSHIELD ENTERPRISE RISK PORTAL                        │
+├───────────────────┬───────────────────┬────────────────────────┬───────────────────────┤
+│ 📱 Borrower Form  │ 🛡️ Underwriter Ops│ 🧪 Threat Simulator   │ 📊 Audit Metrics      │
+│ • Live Onboarding │ • Queue Review    │ • 6 Attack Vectors     │ • 5-Fold CV Table     │
+│ • Real-Time Score │ • 20-Signal Vector│ • Bot & Burner Rings   │ • ROC Curves Plot     │
+│ • Telemetry Demo  │ • Action Buttons  │ • Resilience Test      │ • Confusion Matrix    │
+└───────────────────┴───────────────────┴────────────────────────┴───────────────────────┘
 ```
+
+### 🎮 The 4 Operating Portals Overview:
+1. 📱 **Customer Loan Application (Borrower Onboarding):** Live loan application form where applicants enter details, while the AI engine silently harvests behavioral biometrics and evaluates risk.
+2. 🛡️ **Underwriter Command Center (Bank Ops Queue):** Real-time queue inspector for bank risk analysts to review applications (`APP0000000` to `APP0009999`), view 20-signal vector breakdowns, and execute actions (`Disburse Loan`, `Request Video KYC`, `Block & File SAR`).
+3. 🧪 **Threat Scenario Simulator (6 Attack Vectors):** Simulates real-world attack scenarios (*Legitimate Borrower*, *Thin-File Student*, *Synthetic Burner Line Ring*, *Scripted Bot Harvest*, *Virtual Office Mailbox*, *Device Multi-Accounting*).
+4. 📊 **System Performance & Audit Metrics:** Full 5-fold cross-validation model evaluation metrics, ROC-AUC curve plots, and confusion matrix breakdown.
 
 ---
 
@@ -125,6 +109,7 @@ We benchmarked 5 machine learning architectures using **5-Fold Stratified Cross-
 - **ROC-AUC (0.9139):** Outstanding separation between genuine and synthetic applicant distributions.
 - **Fraud Precision (0.8600):** Ensures minimal friction for real borrowers (very low false alarms).
 - **Fraud Recall (0.9110):** Successfully intercepts **9 out of 10** synthetic fraud attempts.
+- **Capital Protection:** Saved **₹41.0 Crore** across 10,000 synthetic onboarding test applications.
 
 ---
 
@@ -160,7 +145,7 @@ Open in browser: **http://localhost:8501**
 ```
 bfsi/
 ├── app/
-│   └── dashboard.py                       # Interactive Streamlit portal UI
+│   └── dashboard.py                       # 4-Portal Streamlit application UI
 ├── data/
 │   ├── generate_data.py                   # 20-signal synthetic dataset generator
 │   └── synthetic_kyc_behavioral.csv       # 10,000 application dataset
@@ -181,6 +166,7 @@ bfsi/
 │   ├── SIMPLE_PROJECT_EXPLANATION.pdf     # Simple plain-English guide (PDF)
 │   ├── DEPLOYMENT_GUIDE.md                # Cloud & Docker deployment guide
 │   └── images/                            # High-resolution benchmark figures
+├── test_portals.py                        # Automated 4-portal integration test suite
 ├── create_submission_zip.py               # Submission ZIP archive generator
 ├── Synthetic_Identity_Fraud_Detection_Research_Level_Submission.zip
 ├── Dockerfile                             # Container deployment file
@@ -194,5 +180,5 @@ bfsi/
 
 1. **Lead AI/ML Engineer** — Model benchmark engine (`train_model.py`), hyperparameter tuning, 5-fold CV evaluation.
 2. **Data & Feature Engineer** — 20-signal synthetic dataset design (`generate_data.py`), noise modeling, signal distributions.
-3. **UI / App Engineer** — Streamlit research portal (`app/dashboard.py`), interactive sliders, batch telemetry.
+3. **UI / App Engineer** — 4-Portal Streamlit research portal (`app/dashboard.py`), interactive forms, audit log exporter.
 4. **Research & Documentation Lead** — IEEE paper authoring (`research_paper.pdf`), slide deck (`presentation.pptx`), visual plots.
