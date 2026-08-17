@@ -1,6 +1,6 @@
 """
-FinShield - Synthetic Identity Fraud Detection Portal
-Enhanced with Live Feature Contribution Breakdown & Audit Exporter
+FinShield - Synthetic Identity Fraud Detection Engine
+Ultra-Sleek Production Portal UI
 Run with: python -m streamlit run app/dashboard.py
 """
 import streamlit as st
@@ -11,10 +11,10 @@ import os
 import json
 
 st.set_page_config(
-    page_title="FinShield - Synthetic Identity Fraud System",
+    page_title="FinShield - Synthetic Identity Fraud Intelligence",
     page_icon="🛡️",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="collapsed"
 )
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -42,7 +42,7 @@ def load_dataset():
 model, feature_cols, metrics = load_assets()
 df_sample = load_dataset()
 
-# Styling
+# Custom Glassmorphic Dark Styling
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
@@ -51,113 +51,163 @@ st.markdown("""
         font-family: 'Plus Jakarta Sans', sans-serif;
     }
     
-    .top-header {
-        background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
-        border-radius: 16px;
-        padding: 20px 28px;
+    /* Top Hero Banner */
+    .hero-banner {
+        background: linear-gradient(135deg, #090D16 0%, #151D2A 100%);
+        border: 1px solid #232E42;
+        border-radius: 18px;
+        padding: 24px 32px;
         color: white;
         margin-bottom: 24px;
-        box-shadow: 0 10px 25px rgba(15, 23, 42, 0.2);
+        box-shadow: 0 12px 30px rgba(0,0,0,0.35);
     }
     
-    .portal-title {
-        font-size: 26px;
+    .hero-title {
+        font-size: 28px;
         font-weight: 800;
         margin: 0;
         color: #F8FAFC;
+        letter-spacing: -0.5px;
     }
     
-    .portal-sub {
-        font-size: 13.5px;
+    .hero-sub {
+        font-size: 14px;
         color: #94A3B8;
         margin-top: 4px;
     }
     
-    .box-approve {
-        background-color: #ECFDF5;
-        border: 2px solid #10B981;
-        border-radius: 12px;
-        padding: 18px;
-        color: #065F46;
+    /* Metric Counter Cards */
+    .metric-card {
+        background: rgba(21, 29, 42, 0.7);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 14px;
+        padding: 16px;
         text-align: center;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    
+    .metric-num {
+        font-size: 28px;
+        font-weight: 800;
+        color: #60A5FA;
+    }
+
+    .metric-lbl {
+        font-size: 12px;
+        font-weight: 700;
+        color: #94A3B8;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    /* Risk Action Boxes */
+    .box-approve {
+        background-color: #064E3B !important;
+        border: 2px solid #10B981 !important;
+        border-radius: 14px;
+        padding: 20px;
+        color: #ECFDF5 !important;
+        text-align: center;
+        box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
     }
     
     .box-review {
-        background-color: #FFFBEB;
-        border: 2px solid #F59E0B;
-        border-radius: 12px;
-        padding: 18px;
-        color: #92400E;
+        background-color: #78350F !important;
+        border: 2px solid #F59E0B !important;
+        border-radius: 14px;
+        padding: 20px;
+        color: #FEF3C7 !important;
         text-align: center;
+        box-shadow: 0 0 20px rgba(245, 158, 11, 0.2);
     }
     
     .box-reject {
-        background-color: #FEF2F2;
-        border: 2px solid #EF4444;
-        border-radius: 12px;
-        padding: 18px;
-        color: #991B1B;
+        background-color: #7F1D1D !important;
+        border: 2px solid #EF4444 !important;
+        border-radius: 14px;
+        padding: 20px;
+        color: #FEE2E2 !important;
         text-align: center;
+        box-shadow: 0 0 20px rgba(239, 68, 68, 0.25);
     }
     
+    /* High Contrast Callouts */
     .callout-red {
-        background: #FEF2F2;
-        border-left: 4px solid #EF4444;
-        border: 1px solid #FCA5A5;
-        border-left-width: 4px;
-        padding: 12px 16px;
-        border-radius: 8px;
-        margin-bottom: 8px;
-        color: #7F1D1D;
-        font-size: 13.5px;
-        font-weight: 500;
+        background: #2D1214 !important;
+        border-left: 5px solid #EF4444 !important;
+        border: 1px solid #451A1C;
+        border-left-width: 5px;
+        padding: 14px 18px !important;
+        border-radius: 10px !important;
+        margin-bottom: 10px !important;
+        color: #FEE2E2 !important;
+        font-size: 14px !important;
+        font-weight: 500 !important;
     }
 
     .callout-green {
-        background: #ECFDF5;
-        border-left: 4px solid #10B981;
-        border: 1px solid #6EE7B7;
-        border-left-width: 4px;
-        padding: 12px 16px;
-        border-radius: 8px;
-        margin-bottom: 8px;
-        color: #064E3B;
-        font-size: 13.5px;
-        font-weight: 500;
+        background: #062C1E !important;
+        border-left: 5px solid #10B981 !important;
+        border: 1px solid #0B4530;
+        border-left-width: 5px;
+        padding: 14px 18px !important;
+        border-radius: 10px !important;
+        margin-bottom: 10px !important;
+        color: #D1FADF !important;
+        font-size: 14px !important;
+        font-weight: 500 !important;
     }
 </style>
 """, unsafe_allow_html=True)
 
-# Sidebar
-st.sidebar.image("https://img.icons8.com/isometric-folders/100/shield.png", width=60)
-st.sidebar.title("FinShield Portal")
-st.sidebar.caption("Digital Lending Synthetic Fraud Engine")
-
-view_mode = st.sidebar.radio(
-    "Select Operating Portal:",
-    [
-        "📱 Customer Loan Application (Borrower)",
-        "🛡️ Underwriter Command Center (Bank Ops)",
-        "🧪 Threat Scenario Simulator (6 Attacks)",
-        "📊 System Performance & Audit Metrics"
-    ]
-)
-
-st.sidebar.divider()
-st.sidebar.markdown("**Model Evaluation KPI**")
-st.sidebar.metric("ROC-AUC Accuracy", f"{metrics.get('roc_auc', 0.9139):.4f}")
-st.sidebar.metric("Fraud Precision", f"{metrics.get('precision_fraud', 0.8600):.4f}")
-st.sidebar.metric("Fraud Recall", f"{metrics.get('recall_fraud', 0.9110):.4f}")
-
-# Top Banner
+# Top Hero Header Banner
 st.markdown("""
-<div class="top-header">
-    <div class="portal-title">🛡️ FinShield — Synthetic Identity Risk Engine</div>
-    <div class="portal-sub">Digital Lending Onboarding Protection • Real-Time Multimodal Risk Scoring</div>
+<div class="hero-banner">
+    <div class="hero-title">🛡️ FINSHIELD — SYNTHETIC IDENTITY RISK ENGINE</div>
+    <div class="hero-sub">Enterprise Onboarding Protection Portal • Real-Time AI Threat Intelligence</div>
 </div>
 """, unsafe_allow_html=True)
 
-# Helper Function: Render Diagnosis & Feature Contribution
+# Top Metric Counter Bar
+k1, k2, k3, k4 = st.columns(4)
+k1.markdown("""
+<div class="metric-card">
+    <div class="metric-lbl">Total Applications Scored</div>
+    <div class="metric-num">10,000</div>
+</div>
+""", unsafe_allow_html=True)
+
+k2.markdown(f"""
+<div class="metric-card">
+    <div class="metric-lbl">ROC-AUC Model Score</div>
+    <div class="metric-num">{metrics.get('roc_auc', 0.9139):.4f}</div>
+</div>
+""", unsafe_allow_html=True)
+
+k3.markdown(f"""
+<div class="metric-card">
+    <div class="metric-lbl">Fraud Intercept Recall</div>
+    <div class="metric-num">{metrics.get('recall_fraud', 0.9110)*100:.1f}%</div>
+</div>
+""", unsafe_allow_html=True)
+
+k4.markdown("""
+<div class="metric-card">
+    <div class="metric-lbl">Capital Protected</div>
+    <div class="metric-num" style="color: #10B981;">₹41.0 Cr</div>
+</div>
+""", unsafe_allow_html=True)
+
+st.markdown("<br>", unsafe_allow_html=True)
+
+# Main Navigation Tabs
+tab_form, tab_underwriter, tab_simulator, tab_metrics = st.tabs([
+    "📱 Borrower Loan Application",
+    "🛡️ Underwriter Command Center",
+    "🧪 Threat Scenario Simulator",
+    "📊 System Audit & Benchmark Proof"
+])
+
 def render_full_diagnosis(app_df, title_name="Applicant", loan_amount=150000):
     proba = model.predict_proba(app_df[feature_cols])[0, 1]
     score_pct = proba * 100.0
@@ -193,7 +243,6 @@ def render_full_diagnosis(app_df, title_name="Applicant", loan_amount=150000):
             """, unsafe_allow_html=True)
 
         st.markdown("<br>", unsafe_allow_html=True)
-        # Download Audit Report JSON
         audit_data = {
             "applicant": title_name,
             "loan_amount_inr": loan_amount,
@@ -239,9 +288,9 @@ def render_full_diagnosis(app_df, title_name="Applicant", loan_amount=150000):
     st.bar_chart(feat_series)
 
 # -----------------------------------------------------------------------------
-# PORTAL 1: CUSTOMER LOAN APPLICATION (BORROWER)
+# TAB 1: BORROWER LOAN APPLICATION
 # -----------------------------------------------------------------------------
-if view_mode == "📱 Customer Loan Application (Borrower)":
+with tab_form:
     st.markdown("### 📱 Instant Digital Loan Onboarding Form")
     st.caption("Apply for an instant personal loan. Our AI system silently evaluates identity authenticity in real time.")
 
@@ -309,21 +358,13 @@ if view_mode == "📱 Customer Loan Application (Borrower)":
         render_full_diagnosis(app_df, title_name=full_name, loan_amount=loan_amt)
 
 # -----------------------------------------------------------------------------
-# PORTAL 2: UNDERWRITER COMMAND CENTER (BANK OPERATIONS)
+# TAB 2: UNDERWRITER COMMAND CENTER
 # -----------------------------------------------------------------------------
-elif view_mode == "🛡️ Underwriter Command Center (Bank Ops)":
+with tab_underwriter:
     st.markdown("### 🛡️ Bank Risk Underwriter Queue & Diagnosis Console")
     st.caption("Review incoming loan applications, inspect 20-signal threat vectors, and execute underwriter decisions.")
 
     if df_sample is not None:
-        k1, k2, k3, k4 = st.columns(4)
-        k1.metric("Pending Queue", "10,000 Apps")
-        k2.metric("Synthetic Fraud Intercepted", "1,640 Cases (16.4%)")
-        k3.metric("Capital Saved", "₹41.0 Crore")
-        k4.metric("Model ROC-AUC", f"{metrics.get('roc_auc', 0.9139):.4f}")
-
-        st.divider()
-
         c_sel1, c_sel2 = st.columns([1, 2])
         with c_sel1:
             selected_app = st.selectbox("Select Application from Queue:", df_sample["application_id"].tolist(), index=41)
@@ -337,9 +378,9 @@ elif view_mode == "🛡️ Underwriter Command Center (Bank Ops)":
             render_full_diagnosis(app_row, title_name=selected_app, loan_amount=150000)
 
 # -----------------------------------------------------------------------------
-# PORTAL 3: THREAT SCENARIO SIMULATOR (6 ATTACKS)
+# TAB 3: THREAT SCENARIO SIMULATOR
 # -----------------------------------------------------------------------------
-elif view_mode == "🧪 Threat Scenario Simulator (6 Attacks)":
+with tab_simulator:
     st.markdown("### 🧪 Synthetic Identity Attack Vector Simulator")
     st.caption("Simulate real-world financial fraud attack vectors to evaluate AI system resilience.")
 
@@ -390,9 +431,9 @@ elif view_mode == "🧪 Threat Scenario Simulator (6 Attacks)":
     render_full_diagnosis(sim_df, title_name=selected_attack, loan_amount=300000)
 
 # -----------------------------------------------------------------------------
-# PORTAL 4: SYSTEM AUDIT METRICS
+# TAB 4: SYSTEM METRICS & PROOF
 # -----------------------------------------------------------------------------
-elif view_mode == "📊 System Performance & Audit Metrics":
+with tab_metrics:
     st.markdown("### 📊 Empirical System Benchmarks & Model Evaluation")
     
     m1, m2, m3, m4 = st.columns(4)
